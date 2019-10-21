@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package heimonsy.grpc;
+
+option go_package = "github.com/heimonsy/grpc-api-gateway/proto";
+option java_multiple_files = true;
+option objc_class_prefix = "RPC";
+
+message AddRequest {
+	int32 a = 1;
+	int32 b = 2;
+}
+
+message AddResponse {
+	int32 result = 1;
+}
+
+message Command {
+	enum Type {
+		PING = 0;
+		SYNC = 1;
+		CLOSE = 99;
+	}
+
+	Type type = 1;
+	int32 id = 2;
+}
+
+message CommandResponse {
+	int32 id = 1;
+}
+
+service Example {
+	rpc Add(AddRequest) returns (AddResponse);
+	rpc Connect(stream Command) returns (stream CommandResponse);
+}
