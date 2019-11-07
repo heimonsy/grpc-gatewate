@@ -11,18 +11,20 @@ import (
 )
 
 func main() {
-	conn, err := grpc.Dial(":8080", grpc.WithInsecure())
+	conn, err := grpc.Dial(":8810", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	client := proto.NewExampleClient(conn)
 
-	resp, err := client.Add(context.Background(), &proto.AddRequest{A: 2, B: 2})
-	if err != nil {
-		log.Fatalln(err)
+	for i := 0; i < 10; i++ {
+		resp, err := client.Add(context.Background(), &proto.AddRequest{A: 2, B: 2})
+		if err != nil {
+			log.Fatalln(err)
+		}
+		fmt.Println("Add Result:", resp.Result)
 	}
-	fmt.Println("Add Result:", resp.Result)
 
 	stream, err := client.Connect(context.Background())
 	if err != nil {
